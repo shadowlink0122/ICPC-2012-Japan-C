@@ -61,7 +61,7 @@ void rotate_virtical(Dice *dice){
   swap(dice->under,dice->others[2]);
 }
  
-// 指定された面になるようにする
+// Correct orientation
 void init(Dice &dice,int over,int front){
   if(dice.over != over){
     rotate_virtical(&dice);
@@ -76,7 +76,7 @@ void init(Dice &dice,int over,int front){
   while(dice.others[0] != front)rotate_side(&dice);
 }
  
-// 重い面の検出
+// Heavy bias
 vi can_move(Dice dice){
   vi ans;
   vp move;
@@ -90,16 +90,16 @@ vi can_move(Dice dice){
   return ans;
 }
  
-// 動ける面に行けるようにする
+// Find directions to go
 void moving(int index,int *x,int *y){
   // cout << "move index:" << index << endl;
-  if(index == 0)*x = 1,*y = 0;  //下
-  if(index == 1)*x = 0,*y = 1;  //右
-  if(index == 2)*x = -1,*y = 0; //上
-  if(index == 3)*x = 0,*y = -1; //左
+  if(index == 0)*x = 1,*y = 0;  // down
+  if(index == 1)*x = 0,*y = 1;  // right
+  if(index == 2)*x = -1,*y = 0; // up
+  if(index == 3)*x = 0,*y = -1; // left
 }
  
-// 指定された方に方向転換
+// Proceed in the specified direction
 void change_rotation(Dice *dice,int x,int y){
   if(x == 0){
     if(y == 1){
@@ -119,7 +119,7 @@ void change_rotation(Dice *dice,int x,int y){
   }
 }
  
-// デバッグ用
+// For debug
 void print_dice(Dice &dice){
   cout << "over:" << dice.over << endl;
   cout << "under:" << dice.under << endl;
@@ -127,18 +127,7 @@ void print_dice(Dice &dice){
   puts("");
 }
  
- 
-/*
-今いるところから移動できるところが全て同じ高さの時：その時の上の面で更新
-それ以外の時：一番重たい面に一回転がって下層に行けるなら転がる。
-          ：それが無理なら別の面に向かって転がる
- 
-必要なもの：層の高さを記憶する
-        ：最終的な面を記憶する
- 
-この一連の作業を深さ優先探索でする。
-*/
- 
+// Depth first search
 void dfs(Dice *dice,int x,int y){
   bool f = false;
   int can_movex = 0,can_movey = 0;
